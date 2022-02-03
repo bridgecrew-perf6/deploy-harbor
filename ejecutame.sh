@@ -20,18 +20,18 @@ openssl genrsa -out ca.key 4096
 
 # 2. Generate CA certificate (Change the values accordingly)
 openssl req -x509 -new -nodes -sha512 -days 3650 \
- -subj "/C=CN/ST=Colombo/L=Colombo/O=Organization/OU=Personal/CN=harbor-registry.com" \
+ -subj "/C=CN/ST=Colombo/L=Colombo/O=Organization/OU=Personal/CN=34.69.248.232" \
  -key ca.key \
  -out ca.crt
  
 # 3. Generate server certificate(Change the values accordingly)
-openssl genrsa -out harbor-registry.com.key 4096
+openssl genrsa -out 34.69.248.232.key 4096
 
 # 4. Generate certificate signing request(Change the values accordingly)
 openssl req -sha512 -new \
-    -subj "/C=CN/ST=Colombo/L=Colombo/O=Organization/OU=Personal/CN=harbor-registry.com" \
-    -key harbor-registry.com.key \
-    -out harbor-registry.com.csr
+    -subj "/C=CN/ST=Colombo/L=Colombo/O=Organization/OU=Personal/CN=34.69.248.232" \
+    -key 34.69.248.232.key \
+    -out 34.69.248.232.csr
     
 # 5. Generate an x509 v3 extension file.(Change the values accordingly)
 cat > v3.ext <<-EOF
@@ -44,34 +44,34 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1=harbor-registry.com
 DNS.2=harbor-registry
-DNS.3=host-name
+DNS.3=34.69.248.232
 EOF
 
 # 6. Use above file to generate certificate.(Change the values accordingly)
 openssl x509 -req -sha512 -days 3650 \
     -extfile v3.ext \
     -CA ca.crt -CAkey ca.key -CAcreateserial \
-    -in harbor-registry.com.csr \
-    -out harbor-registry.com.crt
+    -in 34.69.248.232.csr \
+    -out 34.69.248.232.crt
 
 # 7. Provide the certificates for Harbor.
 mkdir -p /data/cert
-cp harbor-registry.com.crt /data/cert/
-cp harbor-registry.com.key /data/cert/
+cp 34.69.248.232.crt /data/cert/
+cp 34.69.248.232.key /data/cert/
 
 # 8. For docker to use this cert we need to convert .crt to .cert. Then we need to move them to the appropriate folder.
-openssl x509 -inform PEM -in harbor-registry.com.crt -out harbor-registry.com.cert
-mkdir -p /etc/docker/certs.d/harbor-registry.com
-cp harbor-registry.com.cert /etc/docker/certs.d/harbor-registry.com/
-cp harbor-registry.com.key /etc/docker/certs.d/harbor-registry.com/
-cp ca.crt /etc/docker/certs.d/yourdomain.com/
+openssl x509 -inform PEM -in 34.69.248.232.crt -out 34.69.248.232.cert; \
+mkdir -p /etc/docker/certs.d/34.69.248.232; \
+cp 34.69.248.232.cert /etc/docker/certs.d/34.69.248.232/; \
+cp 34.69.248.232.key /etc/docker/certs.d/34.69.248.232/; \
+cp ca.crt /etc/docker/certs.d/34.69.248.232/
 
 # 9. Restart docker
 systemctl restart docker
 
 # DEPLOY HARBOR
 cd harbor
-modificar config.yaml
+modificar harbor.yaml
 
 ./prepare
 
