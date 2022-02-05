@@ -1,4 +1,3 @@
-sudo -i; \ 
 yum install -y git yum-utils wget openssl; \
 git clone https://github.com/lscalabrini/deploy-harbor.git; \
 cd deploy-harbor; \
