@@ -67,14 +67,7 @@ cp ca.crt /etc/docker/certs.d/${IP}/
 # 9. Restart docker
 systemctl restart docker
 
-# DEPLOY HARBOR
-cd harbor
 
-modificar harbor.yaml
-
-./prepare
-
-docker-compose up -d
 
 
 
